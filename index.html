@@ -53,6 +53,50 @@ h2{color:#183326}
 .header .menu{color:#183326;border-color:#dce6dd;background:#fff}
 @media(max-width:760px){.header .nav{background:rgba(255,255,255,.99);box-shadow:0 18px 30px rgba(24,51,38,.12)}.header .nav a{color:#355343;border-bottom-color:#e7eee8}.header .nav .cta{color:#183326}}
 
+
+/* Boutons professionnels : contrastes nets, géométrie sobre et états accessibles. */
+:root{--button-green:#145c38;--button-green-hover:#0d3b25;--button-gold:#d6b34f}
+.btn,.nav .cta,.form button{
+  min-height:48px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  padding:13px 22px;
+  border:1px solid var(--button-green);
+  border-radius:9px;
+  background:var(--button-green);
+  color:#fff;
+  font-family:'DM Sans',sans-serif;
+  font-size:13px;
+  font-weight:700;
+  line-height:1.2;
+  letter-spacing:.01em;
+  text-decoration:none;
+  box-shadow:0 5px 14px rgba(13,59,37,.13);
+  transition:background-color .18s ease,border-color .18s ease,color .18s ease,box-shadow .18s ease,transform .18s ease;
+}
+.btn{margin-top:25px}
+.nav .cta{padding:12px 18px;min-height:44px;border-radius:8px;background:var(--button-green);color:#fff}
+.form button{width:100%;cursor:pointer;background:var(--button-green);color:#fff}
+.btn:hover,.nav .cta:hover,.form button:hover{
+  background:var(--button-green-hover);
+  border-color:var(--button-green-hover);
+  color:#fff;
+  box-shadow:0 8px 18px rgba(13,59,37,.2);
+  transform:translateY(-1px);
+}
+.btn:active,.nav .cta:active,.form button:active{transform:translateY(0);box-shadow:0 2px 7px rgba(13,59,37,.16)}
+.btn:focus-visible,.nav .cta:focus-visible,.form button:focus-visible,.menu:focus-visible{
+  outline:3px solid rgba(214,179,79,.75);
+  outline-offset:3px;
+}
+.form button:disabled{opacity:.55;cursor:not-allowed;transform:none;box-shadow:none}
+@media(max-width:760px){
+  .nav .cta{width:100%;margin-top:14px;text-align:center}
+  .btn{min-height:48px;padding:13px 19px}
+}
+
 </style>
 </head>
 <body>
