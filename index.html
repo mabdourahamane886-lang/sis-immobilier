@@ -3,12 +3,43 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#123d2a" />
+    <meta name="theme-color" content="#14532d" />
     <meta name="description" content="SIS — Société Immobilière Sahélienne. Achat, vente et accompagnement immobilier au Niger." />
     <title>SIS — Société Immobilière Sahélienne</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+      *{box-sizing:border-box}body{margin:0;font-family:"DM Sans",sans-serif;color:#183326}
+      .boot{min-height:100vh;background:#f6f8f4}.boot-nav{height:78px;background:#fff;display:flex;align-items:center;padding:0 max(24px,calc((100% - 1160px)/2));border-bottom:1px solid #edf0eb}
+      .boot-logo{width:42px;height:42px;border-radius:10px;background:#14532d;color:#fff;display:grid;place-items:center;font:800 24px Manrope;margin-right:12px}.boot-name{font:800 19px Manrope;color:#14532d}.boot-name small{display:block;font:600 8px "DM Sans";letter-spacing:.12em;color:#758176}
+      .boot-links{margin-left:auto;display:flex;gap:24px;font-size:13px;font-weight:600}.boot-links a{color:#31513c;text-decoration:none}
+      .boot-hero{min-height:470px;padding:100px max(24px,calc((100% - 1160px)/2));background:linear-gradient(100deg,#103b28,#14532d);color:#fff}
+      .boot-hero small{color:#e6ca79;letter-spacing:.18em;font-weight:800}.boot-hero h1{font:800 clamp(38px,6vw,66px)/1.12 Manrope;max-width:760px;margin:22px 0}.boot-hero h1 em{color:#e3c56c;font-style:normal}.boot-hero p{max-width:580px;line-height:1.8;color:#e3e9e3}
+      .boot-cta{display:inline-block;margin-top:18px;padding:15px 20px;background:#d6b34f;color:#193a28;text-decoration:none;font-weight:800;border-radius:4px}
+      .boot-foot{padding:42px 24px;text-align:center;color:#526258;font-size:13px}
+      @media(max-width:650px){.boot-links{gap:10px;font-size:11px}.boot-nav{padding:0 18px}.boot-hero{padding:85px 22px}.boot-hero h1{font-size:42px}}
+    </style>
   </head>
-  <body><div id="root"></div><script type="module" src="/src/main.jsx"></script></body>
+  <body>
+    <div id="root">
+      <div class="boot">
+        <header class="boot-nav">
+          <span class="boot-logo">S.</span>
+          <span class="boot-name">SIS<small>SOCIÉTÉ IMMOBILIÈRE SAHÉLIENNE</small></span>
+          <nav class="boot-links" aria-label="Navigation principale">
+            <a href="/">Accueil</a><a href="/a-propos">À propos</a><a href="/services">Services</a><a href="/biens">Nos biens</a><a href="/contact">Contact</a>
+          </nav>
+        </header>
+        <main class="boot-hero">
+          <small>L’IMMOBILIER EN TOUTE CONFIANCE</small>
+          <h1>Votre projet immobilier,<br><em>notre engagement.</em></h1>
+          <p>SIS vous accompagne dans vos projets d’achat, de vente, de construction et d’aménagement immobilier au Niger.</p>
+          <a class="boot-cta" href="/biens">Découvrir nos biens →</a>
+        </main>
+        <footer class="boot-foot">SIS — Société Immobilière Sahélienne · Niamey, Niger</footer>
+      </div>
+    </div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>
