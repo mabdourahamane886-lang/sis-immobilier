@@ -45,3 +45,16 @@ Les photographies sont chargées depuis Unsplash via des URL distantes. Elles so
 
 ## Déploiement
 Le frontend peut être déployé sur Vercel avec `npm run build` et le dossier de sortie `dist`. L'API Express doit être déployée séparément sur un hébergeur Node.js ou adaptée aux fonctions serverless. Ne placez aucune clé secrète dans le code source.
+
+
+## Améliorations visuelles et transparence
+
+- Les visuels du centre-ville de Niamey et du Pont Kennedy sont des photographies documentées de Wikimedia Commons, utilisées avec attribution.
+- Les visuels immobiliers génériques restent des illustrations : ils ne représentent pas des biens SIS et ne doivent pas être interprétés comme des annonces disponibles.
+- Avant publication d'une annonce, renseigner les photos réelles autorisées, la localisation, la superficie, le prix, le statut de disponibilité et les justificatifs vérifiés.
+- La page « Nos biens » rappelle les vérifications documentaires et foncières à effectuer avant tout paiement.
+- Les métadonnées Open Graph, le titre, la description, la balise canonique et les données structurées locales ont été renforcés.
+
+## Fonctionnalités à finaliser avant une gestion complète
+
+L'espace d'administration sécurisé (authentification, rôles, stockage des photos et gestion persistante des annonces) n'est pas activé dans cette version. Il doit être relié à une base de données et à un système d'authentification sécurisé avant de recevoir des identifiants ou des données de clients. Les annonces réelles doivent être ajoutées uniquement après validation par SIS.
