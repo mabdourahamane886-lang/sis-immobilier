@@ -32,17 +32,28 @@ npm run dev
 
 API : `http://localhost:4000/api/health`
 
-## Images et contacts
+## Images
+Les photographies sont chargées depuis Unsplash via des URL distantes. Elles sont illustratives et ne représentent pas nécessairement des biens appartenant à SIS. Remplacez-les par des photos réelles et autorisées avant publication commerciale.
 
-Les visuels et l’emblème sont servis localement depuis `public/assets`. Les crédits de la photographie de Niamey et la provenance des illustrations figurent dans `public/credits-images.md`. Les coordonnées de SIS et les catégories de biens sont définies dans `src/content.js`.
+## Informations à compléter avant mise en ligne
+- Logo officiel SIS
+- Téléphone et WhatsApp officiels
+- Adresse exacte et e-mail
+- Présentation institutionnelle validée
+- Photos réelles des terrains, logements et réalisations
+- Détails vérifiés des biens : localisation, superficie, prix et disponibilité
 
 ## Déploiement
 Le frontend peut être déployé sur Vercel avec `npm run build` et le dossier de sortie `dist`. L'API Express doit être déployée séparément sur un hébergeur Node.js ou adaptée aux fonctions serverless. Ne placez aucune clé secrète dans le code source.
 
 
-## Pages publiques
+## Améliorations visuelles et transparence
 
-La construction génère un fichier HTML pour chaque adresse publique, avec ses métadonnées de partage. Le formulaire de contact prépare un message WhatsApp à relire avant envoi. Les offres, les prix et les disponibilités se confirment auprès de SIS.
+- Les visuels du centre-ville de Niamey et du Pont Kennedy sont des photographies documentées de Wikimedia Commons, utilisées avec attribution.
+- Les visuels immobiliers génériques restent des illustrations : ils ne représentent pas des biens SIS et ne doivent pas être interprétés comme des annonces disponibles.
+- Avant publication d'une annonce, renseigner les photos réelles autorisées, la localisation, la superficie, le prix, le statut de disponibilité et les justificatifs vérifiés.
+- La page « Nos biens » rappelle les vérifications documentaires et foncières à effectuer avant tout paiement.
+- Les métadonnées Open Graph, le titre, la description, la balise canonique et les données structurées locales ont été renforcés.
 
 ## Fonctionnalités à finaliser avant une gestion complète
 

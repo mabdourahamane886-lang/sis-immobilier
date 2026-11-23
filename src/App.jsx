@@ -1,217 +1,40 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Link, NavLink, Route, Routes, useLocation } from 'react-router-dom'
-import { ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Expand, HardHat, Layers, Mail, MapPin, Menu, MessageCircle, Phone, X } from 'lucide-react'
-import { asset, categories, email, missing, models, origin, pages, phones, services, whatsapp } from './content.js'
+import { useState } from 'react'
+import { Routes, Route, NavLink, Link } from 'react-router-dom'
+import { Menu, X, ArrowUpRight, ArrowRight, MapPin, Phone, Mail, ShieldCheck, House, KeyRound, Building2, Trees, CheckCircle2 } from 'lucide-react'
 
-function Brand() {
-  return <Link className="brand" to="/" aria-label="SIS Immobilier, accueil">
-    <img src={asset('embleme')} alt="" width="65" height="36"/>
-    <span><strong>SIS</strong><small>Société Immobilière Sahélienne</small></span>
-  </Link>
+const photos = {
+  hero: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=2000&q=85',
+  house: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=900&q=80',
+  land: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=900&q=80',
+  interior: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=900&q=80',
+  building: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=900&q=80'
 }
-
+const services = [
+  { icon: House, title: 'Achat & vente', text: 'Terrains, parcelles, maisons et logements sélectionnés avec attention.' },
+  { icon: Building2, title: 'Réalisation de logements', text: 'Des solutions d’habitat pensées pour répondre aux besoins des familles.' },
+  { icon: KeyRound, title: 'Conseil immobilier', text: 'Un accompagnement clair à chaque étape de votre projet.' },
+  { icon: Trees, title: 'Aménagement & VRD', text: 'Viabilisation, voirie, réseaux divers et assainissement.' }
+]
+const properties = [
+  { name: 'Parcelles à fort potentiel', type: 'Terrains', location: 'Niamey et environs', image: photos.land, tag: 'Terrain' },
+  { name: 'Résidences familiales', type: 'Maisons', location: 'Secteurs résidentiels', image: photos.house, tag: 'Maison' },
+  { name: 'Espaces de vie modernes', type: 'Logements', location: 'Projets immobiliers', image: photos.interior, tag: 'Logement' }
+]
 function Header() {
   const [open, setOpen] = useState(false)
-  const toggle = useRef(null)
-  const close = () => setOpen(false)
-  return <header className="header" onKeyDown={e => {
-    if (e.key === 'Escape' && open) { close(); toggle.current?.focus() }
-  }}>
-    <div className="wrap header-inner">
-      <div onClick={close}><Brand/></div>
-      <button ref={toggle} type="button" className="menu-toggle" aria-controls="navigation" aria-expanded={open}
-        aria-label={open ? 'Fermer le menu' : 'Ouvrir le menu'} onClick={() => setOpen(!open)}>{open ? <X/> : <Menu/>}</button>
-      <nav id="navigation" aria-label="Navigation principale" className={open ? 'nav open' : 'nav'}>
-        {pages.map(p => <NavLink key={p.path} to={p.path} end onClick={close} className={({isActive}) =>
-          [p.path === '/contact' ? 'nav-contact' : '', isActive ? 'active' : ''].join(' ')}>
-          {p.path === '/contact' ? <>Contacter SIS <ArrowUpRight size={16}/></> : p.label}
-        </NavLink>)}
-      </nav>
-    </div>
-  </header>
+  const links = [['Accueil','/'],['À propos','/a-propos'],['Services','/services'],['Nos biens','/biens'],['Contact','/contact']]
+  return <header className="header"><div className="nav-wrap"><Link to="/" className="brand" onClick={()=>setOpen(false)}><span className="brand-mark">S<span>.</span></span><span className="brand-name">SIS<small>SOCIÉTÉ IMMOBILIÈRE SAHÉLIENNE</small></span></Link><button className="menu-toggle" onClick={()=>setOpen(!open)} aria-label="Ouvrir le menu">{open?<X/>:<Menu/>}</button><nav className={open?'nav open':'nav'}>{links.map(([label,path])=><NavLink key={path} to={path} end={path==='/'} onClick={()=>setOpen(false)}>{label}</NavLink>)}<Link className="nav-cta" to="/contact" onClick={()=>setOpen(false)}>Parlons de votre projet <ArrowUpRight size={16}/></Link></nav></div></header>
 }
-
-function Action({to, children, secondary = false}) {
-  return <Link to={to} className={'action' + (secondary ? ' secondary' : '')}>{children}<ArrowUpRight size={17}/></Link>
-}
-function TextLink({to, children}) { return <Link className="text-link" to={to}>{children}<ArrowRight size={17}/></Link> }
-function WhatsAppLink({children, className, label}) {
-  const url = whatsapp.href + '?text=' + encodeURIComponent('Bonjour SIS, je souhaite obtenir des renseignements sur un projet immobilier.')
-  return <a href={url} className={className} aria-label={label} target="_blank" rel="noopener noreferrer">{children}</a>
-}
-
-function Footer() {
-  return <footer className="footer"><div className="wrap">
-    <div className="footer-grid"><div><Brand/><p>Terrain, logement et construction<br/>à Niamey et au Niger.</p></div>
-      <div><h2>Navigation</h2>{pages.slice(1).map(p => <Link key={p.path} to={p.path}>{p.label}</Link>)}</div>
-      <div><h2>Joindre SIS</h2>{phones.map(p => <a key={p.href} href={p.href}>{p.label}</a>)}
-        <a href={whatsapp.href}>WhatsApp · {whatsapp.label}</a><a href={'mailto:'+email}>{email}</a>
-      </div>
-    </div><div className="footer-base"><span>© {new Date().getFullYear()} Société Immobilière Sahélienne</span><span>Niamey, Niger</span></div>
-  </div></footer>
-}
-
-function PageHeading({label, title, accent, text}) {
-  return <div className="wrap page-heading"><span className="eyebrow">{label}</span>
-    <h1>{title} <em>{accent}</em></h1><p>{text}</p></div>
-}
-function Photo({name, alt, eager = false, ...props}) {
-  return <img src={asset(name)} alt={alt} loading={eager ? 'eager' : 'lazy'} decoding="async" {...props}/>
-}
-function Callout() {
-  return <aside className="callout"><div className="wrap callout-inner"><div><span className="eyebrow">Échanger avec SIS</span><h2>Parlons de votre <em>projet.</em></h2></div>
-    <Action to="/contact">Prendre contact</Action></div></aside>
-}
-
-function Home() {
-  const shortcuts = [
-    [Layers, 'Trouver un terrain', '/biens', 'Parcelles et terrains'],
-    [HardHat, 'Faire construire', '/services#construction', 'Logements et aménagement'],
-    [MessageCircle, 'Demander conseil', '/contact', 'Échanger avec notre équipe']
-  ]
-  return <>
-    <section className="home-hero wrap">
-      <div className="hero-copy"><span className="eyebrow with-line"><MapPin size={14}/> Niamey, Niger</span>
-        <h1>Du terrain <br/>à <em>la maison.</em></h1>
-        <p>La Société Immobilière Sahélienne vous accompagne pour choisir une parcelle, construire ou trouver un logement au Niger.</p>
-        <div className="actions"><Action to="/services">Nos services</Action><TextLink to="/biens">Explorer nos biens</TextLink></div>
-      </div>
-      <figure className="hero-photo"><Photo name="chantier" alt={services[1].alt} eager width="766" height="510"/>
-        <figcaption><span className="caption-mark"></span>Gros œuvre <span className="caption-divider">/</span> Illustration</figcaption>
-      </figure>
-    </section>
-    <div className="quick-band"><div className="wrap quick-grid">{shortcuts.map(([Icon, title, to, note]) =>
-      <Link key={title} to={to}><Icon className="quick-icon" size={24}/><span><b>{title}</b><small>{note}</small></span><ArrowUpRight size={17}/></Link>)}</div></div>
-    <section className="section wrap"><div className="section-head"><div><span className="eyebrow">Nos biens</span><h2>Quel espace <em>recherchez-vous ?</em></h2></div><TextLink to="/biens">Découvrir les modèles</TextLink></div>
-      <CategoryGrid compact/>
-    </section>
-    <section className="soft-section"><div className="wrap story"><figure><Photo name="niamey" alt="Le centre-ville de Niamey vu depuis le fleuve Niger"/><figcaption>Niamey depuis le fleuve Niger · <a href="/credits-images.md">Crédit photo</a></figcaption></figure>
-      <div><span className="eyebrow">La Société Immobilière Sahélienne</span><h2>Un projet ancré <em>à Niamey.</em></h2><p>Le choix d’une parcelle ou d’un logement commence par des questions concrètes. Notre équipe vous aide à préciser vos besoins, à comprendre les options et à préparer les prochaines étapes.</p><TextLink to="/a-propos">Découvrir SIS</TextLink></div>
-    </div></section><Callout/>
-  </>
-}
-function CategoryGrid({compact = false}) {
-  return <div className="category-grid">{categories.map(c =>
-    <Link to={compact ? '/biens#categories' : '/contact?objet='+encodeURIComponent(c.title)} key={c.title} className="category">
-      <Photo name={c.image} alt={c.alt} width="600" height="390"/><div><h3>{c.title}</h3><ArrowUpRight size={20}/></div><p>{c.text}</p>
-    </Link>)}</div>
-}
-
-function About() {
-  return <><PageHeading label="À propos de SIS" title="Un partenaire" accent="de proximité." text="Basée à Niamey, la Société Immobilière Sahélienne accompagne les ménages dans l’accès au terrain et au logement."/>
-    <section className="soft-section"><div className="wrap story"><figure><Photo name="etude" alt={services[2].alt} eager/><figcaption>Étude de plans sur un chantier · Illustration</figcaption></figure>
-      <div><span className="eyebrow">Notre mission</span><h2>Un parcours adapté <em>à chaque ménage.</em></h2><p>Une famille qui prépare sa première construction et un propriétaire qui souhaite vendre ont des besoins différents. Nous partons de votre situation, de vos moyens et de vos priorités pour orienter l’échange.</p></div>
-    </div></section><section className="section wrap"><span className="eyebrow">Notre approche</span><h2>Comment se déroule <em>l’accompagnement ?</em></h2>
-      <div className="principles">{[
-        ['Écouter', 'Nous faisons le point avec vous sur le lieu recherché, le budget et l’usage prévu.'],
-        ['Conseiller', 'Nous vous aidons à comparer les options et à identifier les informations à vérifier.'],
-        ['Accompagner', 'Nous reprenons avec vous les questions en suspens pour préparer la visite ou la prochaine étape.']
-      ].map(([name, text]) => <article key={name}><h3>{name}</h3><p>{text}</p></article>)}</div></section><Callout/></>
-}
-
-function Services() {
-  return <><PageHeading label="Nos services" title="Acheter, bâtir," accent="aménager." text="Chaque projet commence à une étape différente. Choisissez le service qui correspond à votre besoin."/>
-    <section className="wrap service-list" aria-label="Prestations immobilières">{services.map(s =>
-      <article key={s.id} id={s.id} className="service"><Photo name={s.image} alt={s.alt} eager={s.id==='achat-vente'}/>
-        <div><h2>{s.name}</h2><p>{s.text}</p><TextLink to={'/contact?objet='+encodeURIComponent(s.name)}>Parler de ce service</TextLink></div>
-      </article>)}</section><Callout/></>
-}
-
-function Gallery() {
-  const [current,setCurrent] = useState(0)
-  const dialog = useRef(null)
-  const move = delta => setCurrent(i => (i + delta + models.length) % models.length)
-  function show(i) { setCurrent(i); dialog.current.showModal() }
-  return <section className="soft-section"><div className="wrap gallery-section"><span className="eyebrow">Galerie résidentielle</span><h2>Les modèles <em>en images.</em></h2>
-    <p>Façades, plans d’ensemble et implantation des maisons. Sélectionnez une vue pour l’agrandir.</p>
-    <div className="gallery">{models.map(([id,label],i) => <button type="button" key={id} onClick={()=>show(i)} aria-label={'Agrandir la vue '+(i+1)+' — '+label}>
-      <Photo name={'residence-'+id} alt={label}/><span>{label}<Expand size={15}/></span></button>)}</div>
-    <dialog ref={dialog} className="viewer" aria-label="Galerie de modèles" onClick={e=>{if(e.target===dialog.current) dialog.current.close()}}
-      onKeyDown={e=>{if(e.key==='ArrowLeft')move(-1);if(e.key==='ArrowRight')move(1)}}>
-      <div><button className="viewer-close" aria-label="Fermer la vue" onClick={()=>dialog.current.close()}><X/></button>
-        <img src={asset('residence-'+models[current][0])} alt={models[current][1]} loading="lazy"/>
-        <div className="viewer-bar"><button onClick={()=>move(-1)} aria-label="Vue précédente"><ChevronLeft/></button>
-          <span aria-live="polite">{current+1} / {models.length} · {models[current][1]}</span><button onClick={()=>move(1)} aria-label="Vue suivante"><ChevronRight/></button></div>
-      </div>
-    </dialog>
-  </div></section>
-}
-function Properties() {
-  return <><PageHeading label="Nos biens" title="Terrains, maisons" accent="et logements." text="Découvrez les catégories de biens et les modèles présentés par SIS. Pour une disponibilité, un prix ou une superficie, contactez directement notre équipe."/>
-    <section id="categories" className="wrap category-section" aria-label="Catégories de biens"><CategoryGrid/><p className="photo-note">Les visuels illustrent les catégories et les modèles. Les offres disponibles sont confirmées par SIS.</p></section>
-    <Gallery/><section className="wrap section"><span className="eyebrow">Préparer une visite</span><h2>Avant de <em>vous engager.</em></h2><div className="principles">
-      <article><h3>Les documents</h3><p>Demandez les pièces de propriété ou d’attribution et faites-les examiner avant tout paiement.</p></article>
-      <article><h3>La parcelle</h3><p>Sur place, comparez les limites, la superficie et l’accès avec les documents présentés.</p></article>
-      <article><h3>Les conditions</h3><p>Faites préciser le prix, les coordonnées des parties et les modalités de paiement par écrit.</p></article>
-    </div></section><Callout/></>
-}
-
-const subjects = ['Demande d’informations', ...services.map(s=>s.name), ...categories.map(c=>c.title), 'Autre demande']
-function ContactForm() {
-  const {search} = useLocation()
-  const [subject, setSubject] = useState(subjects[0])
-  useEffect(() => {
-    const requested = new URLSearchParams(search).get('objet')
-    setSubject(subjects.includes(requested) ? requested : subjects[0])
-  }, [search])
-  function prepare(e) {
-    e.preventDefault()
-    const data = new FormData(e.currentTarget)
-    const message = ['Bonjour SIS,','Objet : '+subject, String(data.get('message')).trim(),
-      'Nom : '+String(data.get('name')).trim(), 'Téléphone : '+String(data.get('phone')).trim()].join('\n')
-    window.open(whatsapp.href+'?text='+encodeURIComponent(message), '_blank', 'noopener,noreferrer')
-  }
-  return <form className="contact-form" onSubmit={prepare}>
-    <h2>Décrire votre projet</h2>
-    <div className="form-pair"><label>Nom complet<input name="name" autoComplete="name" required/></label>
-      <label>Téléphone<input name="phone" autoComplete="tel" type="tel" required/></label></div>
-    <label>Objet<select name="subject" value={subject} onChange={e=>setSubject(e.target.value)}>{subjects.map(s=><option key={s}>{s}</option>)}</select></label>
-    <label>Votre message<textarea name="message" rows="4" placeholder="Quartier, type de bien, budget envisagé…" required/></label>
-    <button className="action" type="submit"><MessageCircle size={18}/> Préparer le message WhatsApp</button>
-    <small>Vous pourrez relire et envoyer votre message dans WhatsApp.</small>
-  </form>
-}
-function Contact() {
-  return <><PageHeading label="Contact" title="Parlons de" accent="votre projet." text="Pour une visite, un renseignement ou une demande de devis, contactez l’équipe SIS à Niamey."/>
-    <section className="wrap contact-layout" aria-label="Coordonnées et formulaire">
-      <div className="contact-details">
-        <div><Phone/><div><h2>Téléphones</h2>{phones.map(p=><a key={p.href} href={p.href}>{p.label}</a>)}</div></div>
-        <div><MessageCircle/><div><h2>WhatsApp devis</h2><WhatsAppLink>{whatsapp.label} <ArrowUpRight size={16}/></WhatsAppLink></div></div>
-        <div><Mail/><div><h2>E-mail</h2><a href={'mailto:'+email}>{email}</a></div></div>
-        <div><MapPin/><div><h2>Localisation</h2><p>Niamey, Niger</p></div></div>
-      </div><ContactForm/>
-    </section></>
-}
-function NotFound() {
-  return <div className="wrap not-found"><h1>Page <em>introuvable.</em></h1><Action to="/">Revenir à l’accueil</Action></div>
-}
-function RouteEffects() {
-  const {pathname,hash} = useLocation()
-  const previous = useRef(pathname)
-  useEffect(()=>{
-    const current = pages.find(p=>p.path === (pathname.replace(/\/$/,'') || '/')) || missing
-    document.title = current.title
-    for (const [selector,attribute,value] of [
-      ['meta[name="description"]','content',current.description],
-      ['meta[property="og:title"]','content',current.title],
-      ['meta[property="og:description"]','content',current.description],
-      ['meta[property="og:url"]','content',origin+pathname],
-      ['link[rel="canonical"]','href',origin+pathname]
-    ]) document.querySelector(selector)?.setAttribute(attribute,value)
-    if(hash) document.getElementById(hash.slice(1))?.scrollIntoView()
-    else if(previous.current !== pathname) {
-      window.scrollTo(0,0)
-      document.getElementById('contenu')?.focus({preventScroll:true})
-    }
-    previous.current = pathname
-  },[pathname,hash])
-  return null
-}
-export default function App() {
-  return <><RouteEffects/><a className="skip" href="#contenu">Aller au contenu</a><Header/>
-    <main id="contenu" tabIndex="-1"><Routes>
-      <Route path="/" element={<Home/>}/><Route path="/a-propos" element={<About/>}/>
-      <Route path="/services" element={<Services/>}/><Route path="/biens" element={<Properties/>}/>
-      <Route path="/contact" element={<Contact/>}/><Route path="*" element={<NotFound/>}/>
-    </Routes></main><Footer/><WhatsAppLink className="floating" label="Contacter SIS sur WhatsApp"><MessageCircle size={24}/></WhatsAppLink></>
-}
+function Footer(){return <footer className="footer"><div className="container footer-grid"><div><Link to="/" className="brand footer-brand"><span className="brand-mark">S<span>.</span></span><span className="brand-name">SIS<small>SOCIÉTÉ IMMOBILIÈRE SAHÉLIENNE</small></span></Link><p>Construire la confiance. Accompagner vos projets immobiliers au Sahel.</p></div><div><h4>Navigation</h4><Link to="/a-propos">À propos</Link><Link to="/services">Nos services</Link><Link to="/biens">Nos biens</Link></div><div><h4>Contact</h4><span><MapPin size={15}/> Niamey, Niger</span><span><Phone size={15}/> Coordonnées à confirmer</span><span><Mail size={15}/> Contactez-nous</span></div></div><div className="container copyright">© {new Date().getFullYear()} SIS — Société Immobilière Sahélienne. Tous droits réservés.</div></footer>}
+function Layout({children}){return <><Header/>{children}<Footer/></>}
+function SectionTitle({eyebrow,title,description}){return <div className="section-title"><span className="eyebrow">{eyebrow}</span><h2>{title}</h2>{description&&<p>{description}</p>}</div>}
+function Home(){return <Layout><main><section className="hero" style={{backgroundImage:'linear-gradient(90deg,rgba(9,37,25,.88),rgba(9,37,25,.34)),url('+photos.hero+')'}}><div className="container hero-content"><span className="eyebrow light">L’IMMOBILIER EN TOUTE CONFIANCE</span><h1>Votre projet immobilier,<br/><em>notre engagement.</em></h1><p>SIS vous accompagne dans vos projets d’achat, de vente, de construction et d’aménagement immobilier au Niger.</p><div className="hero-actions"><Link to="/biens" className="btn btn-gold">Découvrir nos biens <ArrowUpRight size={17}/></Link><Link to="/a-propos" className="text-link">Découvrir SIS <ArrowRight size={17}/></Link></div></div><div className="hero-note"><ShieldCheck/> <span>Un accompagnement de proximité<br/><b>Au service de vos projets</b></span></div></section><section className="trust-strip"><div className="container trust-items"><span><CheckCircle2/> Écoute et conseil</span><span><CheckCircle2/> Accompagnement personnalisé</span><span><CheckCircle2/> Solutions immobilières</span></div></section><section className="section container intro-grid"><div><span className="eyebrow">QUI SOMMES-NOUS ?</span><h2>Un partenaire de confiance pour bâtir <em>l’avenir.</em></h2></div><div className="intro-copy"><p>Société Immobilière Sahélienne, SIS place la confiance, la transparence et la qualité de service au cœur de chaque projet immobilier.</p><Link className="under-link" to="/a-propos">En savoir plus sur SIS <ArrowUpRight size={16}/></Link></div></section><section className="section section-soft"><div className="container"><SectionTitle eyebrow="CE QUE NOUS FAISONS" title="Des services pour chaque étape" description="De la recherche d’un terrain à la réalisation de votre logement, nous vous accompagnons avec méthode."/><div className="service-grid">{services.map(({icon:Icon,title,text},i)=><article className="service-card" key={title}><span className="service-icon"><Icon/></span><small>0{i+1}</small><h3>{title}</h3><p>{text}</p><Link to="/services" aria-label={'En savoir plus : '+title}><ArrowUpRight/></Link></article>)}</div></div></section><section className="section container"><div className="section-heading-row"><SectionTitle eyebrow="SÉLECTION IMMOBILIÈRE" title="Des lieux, des possibilités"/><Link className="under-link" to="/biens">Voir tous les biens <ArrowUpRight size={16}/></Link></div><PropertyGrid/></section><Callout/></main></Layout>}
+function PropertyGrid(){return <div className="property-grid">{properties.map(p=><article className="property-card" key={p.name}><div className="property-image"><img src={p.image} alt={p.name} loading="lazy"/><span>{p.tag}</span></div><div className="property-info"><small>{p.type}</small><h3>{p.name}</h3><p><MapPin size={15}/>{p.location}</p><Link to="/contact">Demander des informations <ArrowUpRight size={15}/></Link></div></article>)}</div>}
+function PageHero({label,title,text,image=photos.building}){return <section className="page-hero" style={{backgroundImage:'linear-gradient(90deg,rgba(9,37,25,.88),rgba(9,37,25,.5)),url('+image+')'}}><div className="container"><span className="eyebrow light">{label}</span><h1>{title}</h1><p>{text}</p></div></section>}
+function About(){return <Layout><PageHero label="QUI SOMMES-NOUS ?" title={<>L’immobilier avec une vision<br/><em>durable et humaine.</em></>} text="Découvrez l’esprit et les engagements de la Société Immobilière Sahélienne."/><section className="section container split-section"><img className="editorial-image" src={photos.interior} alt="Intérieur lumineux d’une habitation" /><div><span className="eyebrow">SIS — NOTRE IDENTITÉ</span><h2>Créer des opportunités, accompagner les projets.</h2><p>SIS est une société immobilière qui ambitionne de faciliter l’accès aux opportunités foncières et au logement grâce à un accompagnement de proximité.</p><p>Notre priorité : vous aider à prendre des décisions éclairées, avec des informations claires et un suivi attentif.</p><div className="value-list"><span><CheckCircle2/> Transparence</span><span><CheckCircle2/> Proximité</span><span><CheckCircle2/> Qualité de service</span></div></div></section><section className="section section-soft"><div className="container"><SectionTitle eyebrow="NOS ENGAGEMENTS" title="La confiance au cœur de nos actions"/><div className="values-grid"><div><b>01</b><h3>Écouter</h3><p>Comprendre vos besoins avant de proposer une solution.</p></div><div><b>02</b><h3>Conseiller</h3><p>Vous apporter des informations utiles à chaque décision.</p></div><div><b>03</b><h3>Accompagner</h3><p>Rester à vos côtés tout au long de votre démarche.</p></div></div></div></section></Layout>}
+function Services(){return <Layout><PageHero label="NOS COMPÉTENCES" title={<>Des solutions adaptées<br/><em>à vos ambitions.</em></>} text="Un ensemble de prestations pour concrétiser vos projets immobiliers."/><section className="section container"><div className="service-grid service-grid-page">{services.map(({icon:Icon,title,text},i)=><article className="service-card" key={title}><span className="service-icon"><Icon/></span><small>0{i+1}</small><h3>{title}</h3><p>{text}</p></article>)}</div><div className="service-feature"><img src={photos.building} alt="Architecture contemporaine"/><div><span className="eyebrow">UN SUIVI DE PROXIMITÉ</span><h2>Un interlocuteur à chaque étape.</h2><p>Expliquez-nous votre besoin : notre équipe vous orientera vers les solutions adaptées à votre situation.</p><Link to="/contact" className="btn btn-green">Échanger avec SIS <ArrowUpRight size={17}/></Link></div></div></section></Layout>}
+function Properties(){return <Layout><PageHero label="NOS BIENS IMMOBILIERS" title={<>Trouvez l’espace<br/><em>qui vous ressemble.</em></>} text="Terrains, parcelles et logements : découvrez les catégories de biens proposées par SIS." image={photos.hero}/><section className="section container"><div className="notice"><ShieldCheck/><p><b>Informations immobilières</b><br/>Les visuels présentés sont illustratifs. Les disponibilités, superficies, prix et documents de chaque bien doivent être confirmés directement auprès de SIS.</p></div><PropertyGrid/></section></Layout>}
+function Contact(){return <Layout><PageHero label="CONTACT" title={<>Parlons de votre<br/><em>projet immobilier.</em></>} text="Notre équipe est à votre écoute pour répondre à vos questions."/><section className="section container contact-grid"><div><span className="eyebrow">PRENONS CONTACT</span><h2>Votre prochain projet commence par un échange.</h2><p>Contactez SIS pour obtenir des renseignements sur nos services ou sur un bien immobilier.</p><div className="contact-detail"><MapPin/><div><b>Adresse</b><span>Niamey, Niger — adresse à préciser</span></div></div><div className="contact-detail"><Phone/><div><b>Téléphone</b><span>Numéro à communiquer</span></div></div><div className="contact-detail"><Mail/><div><b>Courriel</b><span>Adresse e-mail à communiquer</span></div></div></div><form className="contact-form" onSubmit={e=>{e.preventDefault();const d=new FormData(e.currentTarget);const msg='Bonjour SIS, je souhaite vous contacter. Nom : '+d.get('name')+'. Téléphone : '+d.get('phone')+'. Sujet : '+d.get('subject')+'. Message : '+d.get('message');window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank')}}><label>Nom complet<input name="name" required placeholder="Votre nom"/></label><label>Téléphone<input name="phone" required placeholder="Votre numéro"/></label><label>Objet<select name="subject"><option>Demande d’informations</option><option>Achat ou vente</option><option>Terrain ou logement</option><option>Autre demande</option></select></label><label>Votre message<textarea name="message" rows="5" required placeholder="Décrivez votre projet..."/></label><button className="btn btn-green" type="submit">Envoyer via WhatsApp <ArrowUpRight size={17}/></button><small>Le formulaire prépare un message WhatsApp. Aucun message n’est envoyé sans votre action.</small></form></section></Layout>}
+function Callout(){return <section className="callout"><div className="container callout-inner"><div><span className="eyebrow light">VOTRE PROJET, NOTRE PRIORITÉ</span><h2>Faisons avancer votre projet immobilier.</h2></div><Link className="btn btn-gold" to="/contact">Contacter SIS <ArrowUpRight size={17}/></Link></div></section>}
+function NotFound(){return <Layout><div className="container not-found"><h1>Page introuvable</h1><Link to="/" className="btn btn-green">Retour à l’accueil</Link></div></Layout>}
+export default function App(){return <Routes><Route path="/" element={<Home/>}/><Route path="/a-propos" element={<About/>}/><Route path="/services" element={<Services/>}/><Route path="/biens" element={<Properties/>}/><Route path="/contact" element={<Contact/>}/><Route path="*" element={<NotFound/>}/></Routes>}
